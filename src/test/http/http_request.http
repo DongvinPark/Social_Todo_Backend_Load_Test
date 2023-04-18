@@ -1,0 +1,7 @@
+### init users
+POST http://localhost:8080/init/users
+
+
+
+### init feeds
+POST http://localhost:8080/init/feeds
