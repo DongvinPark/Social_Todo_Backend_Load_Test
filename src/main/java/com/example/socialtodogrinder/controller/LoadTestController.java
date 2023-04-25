@@ -13,12 +13,12 @@ public class LoadTestController {
 
     @PostMapping("/test/database")
     public void pressSupportOnlyDB(){
-
+        supportService.pressSupportOnlyDB();
     }
 
     @PostMapping("/test/redis/async")
     public void pressSupportDBRedisAsync(){
-        
+        supportService.pressSupportDBandRedisAndAsync();
     }
 
 }
