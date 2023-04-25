@@ -28,14 +28,20 @@ public class SupportService {
         // 주키 번호 추첨
         Long randomUserId = random.nextLong(10000);
 
-        // 5000번 피드에 좋아요 누르기.
+        // 5000번 피드 엔티티에 좋아요 개수 1개 추가하고, 서포트 정보를 서포트 테이블에 기록하기.
         Optional<FeedEntity> optionalFeedEntity = feedRepository.findById(5000L);
         if(optionalFeedEntity.isPresent()){
-            // support 테이블의 좋아요 개수 1개 추가하기
             FeedEntity feedEntity = optionalFeedEntity.get();
             Long supportNumber = feedEntity.getSupportNumber();
             supportNumber++;
             feedEntity.setSupportNumber(supportNumber);
+
+            supportRepository.save(
+                SupportEntity.builder()
+                    .feedId(5000L)
+                    .supportSentUserId(randomUserId)
+                    .build()
+            );
         }
 
     }
