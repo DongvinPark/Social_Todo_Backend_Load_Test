@@ -13,6 +13,7 @@ public class DatabaseInitController {
 
     private final FeedService feedService;
     private final UserService userService;
+    private final SupportService supportService;
 
     /*@PostMapping("/init/feeds")
     public void initFeed(){
@@ -23,5 +24,10 @@ public class DatabaseInitController {
     public void initUser(){
         userService.initUserDB();
     }*/
+
+    @PostMapping("/init/redis")
+    public void initRedis(){
+        supportService.initRedis();
+    }
 
 }

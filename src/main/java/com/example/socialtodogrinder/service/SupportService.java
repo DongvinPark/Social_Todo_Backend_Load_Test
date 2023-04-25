@@ -5,6 +5,7 @@ import com.example.socialtodogrinder.persist.FeedRepository;
 import com.example.socialtodogrinder.persist.SupportEntity;
 import com.example.socialtodogrinder.persist.SupportRepository;
 import com.example.socialtodogrinder.persist.UserRepository;
+import com.example.socialtodogrinder.persist.redis.SupportNumberCacheRepository;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ public class SupportService {
     private final SupportRepository supportRepository;
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+    private final SupportNumberCacheRepository supportNumberCacheRepository;
+
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     @Transactional
@@ -46,15 +49,25 @@ public class SupportService {
 
     }
 
+    @Async
     @Transactional
     public void pressSupportDBandRedisAndAsync(){
         // 1 ~ 10_000 번의 유저들 중 임의의 1 명이 주키 아이디 5000 번의 글에 좋아요를 누른다.
         // 주키 번호 추첨
         Long randomUserId = random.nextLong(10000);
 
-        // 5000번 피드가 아니라 레디스에 좋아요 기록하가..
+        // 5000번 피드가 아니라 레디스에 응원(==좋아요) 개수 기록하고 서포트 테이블에 정보 저장하기.
+        Optional<FeedEntity> optionalFeedEntity = feedRepository.findById(5000L);
+        if(optionalFeedEntity.isPresent()){
+            supportNumberCacheRepository.plusOneSupport(5000L);
 
-        // support 테이블에 기록하가.
+            supportRepository.save(
+                SupportEntity.builder()
+                    .feedId(5000L)
+                    .supportSentUserId(randomUserId)
+                    .build()
+            );
+        }
     }
 
     @Transactional
@@ -70,6 +83,11 @@ public class SupportService {
     public void kafkaConsumer(){
         // 여기서 카프카의 메시지를 소비하면서 DB의 support 정보 테이블에 정보를 기록한다.
         // 단, 처리량을 조절해야 한다.
+    }
+
+    // 5000번 피드의 최초 좋아요 개수를 레디스에 기록한다.
+    public void initRedis(){
+        supportNumberCacheRepository.setInitialSupport(5000L);
     }
 
 }
