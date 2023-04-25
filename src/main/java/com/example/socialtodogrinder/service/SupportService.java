@@ -31,13 +31,11 @@ public class SupportService {
         // 5000번 피드에 좋아요 누르기.
         Optional<FeedEntity> optionalFeedEntity = feedRepository.findById(5000L);
         if(optionalFeedEntity.isPresent()){
-            // support 테이블에 기록하가.
-            supportRepository.save(
-                SupportEntity.builder()
-                    .supportSentUserId(randomUserId)
-                    .feedId(5000L)
-                    .build()
-            );
+            // support 테이블의 좋아요 개수 1개 추가하기
+            FeedEntity feedEntity = optionalFeedEntity.get();
+            Long supportNumber = feedEntity.getSupportNumber();
+            supportNumber++;
+            feedEntity.setSupportNumber(supportNumber);
         }
 
     }
