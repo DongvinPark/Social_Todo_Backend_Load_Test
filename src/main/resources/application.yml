@@ -11,6 +11,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: false
+    database: mysql
 
 aws:
   redis:
