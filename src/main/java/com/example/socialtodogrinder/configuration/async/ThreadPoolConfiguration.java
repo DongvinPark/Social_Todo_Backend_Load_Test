@@ -16,9 +16,9 @@ public class ThreadPoolConfiguration extends AsyncConfigurerSupport {
 
         int n = Runtime.getRuntime().availableProcessors();
 
-        executor.setCorePoolSize(3*n);
-        executor.setMaxPoolSize(3*n);
-        executor.setQueueCapacity(15_000);
+        executor.setCorePoolSize(20*n);
+        executor.setMaxPoolSize(40*n);
+        executor.setQueueCapacity(60_000);
         executor.setThreadNamePrefix("Async Thread -");
         executor.initialize();
         return executor;
