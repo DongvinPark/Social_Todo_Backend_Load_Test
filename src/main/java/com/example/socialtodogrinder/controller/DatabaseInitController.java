@@ -4,6 +4,7 @@ import com.example.socialtodogrinder.service.FeedService;
 import com.example.socialtodogrinder.service.SupportService;
 import com.example.socialtodogrinder.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,11 @@ public class DatabaseInitController {
     @PostMapping("/init/redis")
     public void initRedis(){
         supportService.initRedis();
+    }
+
+    @GetMapping("/status/check")
+    public int check(){
+        return 200;
     }
 
 }
